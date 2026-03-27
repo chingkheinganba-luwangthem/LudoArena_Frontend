@@ -5,12 +5,14 @@ import { useAuth } from '../../context/AuthContext';
 import GoogleIcon from '@mui/icons-material/Google';
 import CasinoIcon from '@mui/icons-material/Casino';
 
+import { GoogleLogin } from '@react-oauth/google';
+
 const Signup = () => {
     const [data, setData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     
-    const { signup } = useAuth();
+    const { signup, googleAuth } = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -40,9 +42,17 @@ const Signup = () => {
         }
     };
 
-    const handleGoogleLogin = () => {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:8091';
-        window.location.href = `${baseUrl}/oauth2/authorization/google`;
+    const handleGoogleSuccess = async (credentialResponse) => {
+        setError('');
+        setLoading(true);
+        try {
+            await googleAuth(credentialResponse.credential);
+            navigate('/');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Google signup failed');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -75,22 +85,17 @@ const Signup = () => {
                 {error && <Alert severity="error" sx={{ mb: 2, bgcolor: 'rgba(239,68,68,0.1)', color: '#fca5a5' }}>{error}</Alert>}
 
                 {/* Google Sign Up - Featured at top */}
-                <Button
-                    fullWidth
-                    variant="outlined"
-                    size="large"
-                    startIcon={<GoogleIcon />}
-                    onClick={handleGoogleLogin}
-                    sx={{ 
-                        mb: 2, py: 1.3,
-                        color: '#e2e8f0', 
-                        borderColor: 'rgba(255,255,255,0.12)',
-                        fontWeight: 600,
-                        '&:hover': { borderColor: 'rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.04)' }
-                    }}
-                >
-                    Sign up with Google
-                </Button>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                    <GoogleLogin 
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => setError('Google signup failed')}
+                        useOneTap
+                        theme="filled_blue"
+                        shape="pill"
+                        text="signup_with"
+                        width="100%"
+                    />
+                </Box>
 
                 <Divider sx={{ mb: 2, '&::before, &::after': { borderColor: 'rgba(255,255,255,0.08)' } }}>
                     <Typography variant="caption" sx={{ color: '#64748b' }}>OR</Typography>

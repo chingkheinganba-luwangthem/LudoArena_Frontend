@@ -24,7 +24,7 @@ export const GameProvider = ({ children, token, user }) => {
     useEffect(() => {
         if (!token) return;
         const client = new Client({
-            webSocketFactory: () => new SockJS(import.meta.env.VITE_WS_URL || 'http://localhost:8091/ws'),
+            webSocketFactory: () => new SockJS(import.meta.env.VITE_WS_URL || 'https://ludoarena-backend-lp.onrender.com/ws'),
             connectHeaders: { Authorization: `Bearer ${token}` },
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,

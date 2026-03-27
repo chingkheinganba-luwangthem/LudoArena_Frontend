@@ -55,6 +55,15 @@ export const AuthProvider = ({ children }) => {
         return res.data;
     };
 
+    const googleAuth = async (idToken) => {
+        const res = await api.post('/auth/google', { idToken });
+        const { token: newToken, userId, ...rest } = res.data.data;
+        setToken(newToken);
+        localStorage.setItem('token', newToken);
+        setUser({ id: userId, ...rest });
+        return res.data;
+    };
+
     const updateProfile = async (profileData) => {
         const res = await api.put('/auth/profile', profileData);
         setUser(res.data.data); // Update local user state with the response
@@ -68,7 +77,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, loading, login, signup, guestLogin, logout, updateProfile }}>
+        <AuthContext.Provider value={{ user, token, loading, login, signup, guestLogin, googleAuth, logout, updateProfile }}>
             {children}
         </AuthContext.Provider>
     );

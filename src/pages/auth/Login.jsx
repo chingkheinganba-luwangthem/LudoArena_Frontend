@@ -6,12 +6,14 @@ import GoogleIcon from '@mui/icons-material/Google';
 import CasinoIcon from '@mui/icons-material/Casino';
 import PersonIcon from '@mui/icons-material/Person';
 
+import { GoogleLogin } from '@react-oauth/google';
+
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     
-    const { login, guestLogin } = useAuth();
+    const { login, guestLogin, googleAuth } = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -44,9 +46,17 @@ const Login = () => {
         }
     };
 
-    const handleGoogleLogin = () => {
-        const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:8091';
-        window.location.href = `${baseUrl}/oauth2/authorization/google`;
+    const handleGoogleSuccess = async (credentialResponse) => {
+        setError('');
+        setLoading(true);
+        try {
+            await googleAuth(credentialResponse.credential);
+            navigate('/');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Google login failed');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -81,10 +91,21 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <TextField fullWidth label="Email Address" name="email" variant="outlined" margin="normal" value={credentials.email} onChange={handleChange} required type="email" />
                     <TextField fullWidth label="Password" name="password" type="password" variant="outlined" margin="normal" value={credentials.password} onChange={handleChange} required />
-                    <Button fullWidth type="submit" variant="contained" size="large" sx={{ mt: 2, mb: 2, py: 1.5, fontWeight: 700 }} disabled={loading}>
+                    <Button fullWidth type="submit" variant="contained" size="large" sx={{ mt: 2, mb: 1.5, py: 1.5, fontWeight: 700 }} disabled={loading}>
                         {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
                     </Button>
                 </form>
+
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
+                    <GoogleLogin 
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => setError('Google login failed')}
+                        useOneTap
+                        theme="filled_blue"
+                        shape="pill"
+                        text="continue_with"
+                    />
+                </Box>
 
                 <Box sx={{ mt: 1, textAlign: 'center' }}>
                     <Typography variant="body2" sx={{ color: '#94a3b8' }}>
@@ -95,23 +116,6 @@ const Login = () => {
                 <Divider sx={{ my: 3, '&::before, &::after': { borderColor: 'rgba(255,255,255,0.08)' } }}>
                     <Typography variant="caption" sx={{ color: '#64748b' }}>OR</Typography>
                 </Divider>
-
-                <Button
-                    fullWidth
-                    variant="outlined"
-                    size="large"
-                    startIcon={<GoogleIcon />}
-                    onClick={handleGoogleLogin}
-                    sx={{ 
-                        mb: 1.5, py: 1.3,
-                        color: '#e2e8f0', 
-                        borderColor: 'rgba(255,255,255,0.12)',
-                        fontWeight: 600,
-                        '&:hover': { borderColor: 'rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.04)' }
-                    }}
-                >
-                    Continue with Google
-                </Button>
 
                 <Button
                     fullWidth
