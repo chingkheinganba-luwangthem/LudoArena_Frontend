@@ -314,7 +314,7 @@ const GameBoard = () => {
             {/* Completion Modal */}
             {game.state === 'COMPLETED' && (
                 <Box sx={{
-                    position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', 
+                    position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', 
                     flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                     background: 'radial-gradient(circle, rgba(124,58,237,0.4) 0%, rgba(0,0,0,0.9) 100%)', p: 3,
                 }}>
