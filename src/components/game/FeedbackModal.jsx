@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Box, Rating, TextField, Button, CircularProgress } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import api from '../services/api';
+import api from '../../services/api';
 
 const FeedbackModal = ({ open, onClose }) => {
     const [rating, setRating] = useState(5);
@@ -21,7 +21,7 @@ const FeedbackModal = ({ open, onClose }) => {
                 setRating(5);
             }, 2000);
         } catch (err) {
-            console.error('Failed to submit feedback');
+            console.error('Failed to submit feedback', err);
         } finally {
             setLoading(false);
         }

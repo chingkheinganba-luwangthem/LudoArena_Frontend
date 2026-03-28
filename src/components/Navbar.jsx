@@ -38,7 +38,8 @@ const Navbar = () => {
     };
 
     return (
-        <AppBar 
+        <>
+            <AppBar 
             position="sticky" 
             elevation={0} 
             sx={{ 
@@ -154,9 +155,10 @@ const Navbar = () => {
                     </Box>
                 )}
             </Toolbar>
-            <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
         </AppBar>
-    );
+        <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
+    </>
+);
 };
 
 export default Navbar;

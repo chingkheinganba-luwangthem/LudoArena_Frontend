@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Typography, Button, Grid, Card, CardContent, Stack, IconButton, Divider } from '@mui/material';
+import { Box, Container, Typography, Button, Grid, Card, CardContent, Stack, IconButton, Divider, Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import GroupIcon from '@mui/icons-material/Group';
@@ -31,7 +31,7 @@ const Landing = () => {
                 const res = await api.get('/feedback/public');
                 if (res.data) setPublicFeedbacks(res.data);
             } catch (err) {
-                console.error('Failed to fetch feedbacks');
+                console.error('Failed to fetch feedbacks', err);
             }
         };
         fetchFeedbacks();
@@ -256,7 +256,7 @@ const Landing = () => {
                                         </Typography>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                             <Avatar sx={{ width: 32, height: 32, bgcolor: '#7c3aed', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                                                {fb.user?.name?.charAt(0).toUpperCase() || '?'}
+                                                {(fb.user?.name?.charAt(0) || '?').toUpperCase()}
                                             </Avatar>
                                             <Box>
                                                 <Typography variant="subtitle2" sx={{ color: '#e2e8f0', fontWeight: 'bold', fontSize: '0.8rem' }}>{fb.user?.name || 'Player'}</Typography>
