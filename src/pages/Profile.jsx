@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, Typography, Avatar, Grid, Divider, IconButton } from '@mui/material';
+import { Box, Card, Typography, Avatar, Grid, Divider, IconButton, Button } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import CasinoIcon from '@mui/icons-material/Casino';
