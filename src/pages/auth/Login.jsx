@@ -100,7 +100,6 @@ const Login = () => {
                     <GoogleLogin 
                         onSuccess={handleGoogleSuccess}
                         onError={() => setError('Google login failed')}
-                        useOneTap
                         theme="filled_blue"
                         shape="pill"
                         text="continue_with"
@@ -121,7 +120,7 @@ const Login = () => {
                     fullWidth
                     variant="outlined"
                     size="large"
-                    startIcon={<PersonIcon />}
+                    startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <PersonIcon />}
                     onClick={handleGuestLogin}
                     disabled={loading}
                     sx={{ 
@@ -132,7 +131,7 @@ const Login = () => {
                         '&:hover': { borderColor: 'rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.03)' }
                     }}
                 >
-                    Play as Guest
+                    {loading ? 'Entering Arena...' : 'Play as Guest'}
                 </Button>
             </Card>
         </Box>

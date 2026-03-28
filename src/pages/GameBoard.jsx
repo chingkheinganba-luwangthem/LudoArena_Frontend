@@ -222,25 +222,35 @@ const GameBoard = () => {
             {/* Mobile Bottom Bar */}
             <Box sx={{ 
                 display: { xs: 'flex', md: 'none' }, alignItems: 'center', justifyContent: 'space-between',
-                p: 1, gap: 1, bgcolor: 'rgba(19, 19, 26, 0.95)', borderTop: '1px solid rgba(255,255,255,0.08)',
+                px: 2, 
+                pt: 1.5,
+                pb: 'max(15px, env(safe-area-inset-bottom))', 
+                gap: 1, bgcolor: 'rgba(13, 13, 18, 0.98)', borderTop: '1px solid rgba(255,255,255,0.1)',
                 position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, backdropFilter: 'blur(20px)',
             }}>
                 <IconButton onClick={() => setShowPlayers(true)} sx={{ color: '#a78bfa', bgcolor: 'rgba(124,58,237,0.15)', borderRadius: 2 }}>
                     <PeopleIcon />
                 </IconButton>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <TimerIcon sx={{ color: timerColor, fontSize: 18 }} />
-                    <Typography variant="body2" fontWeight="bold" sx={{ color: timerColor }}>{turnTimer}s</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <TimerIcon sx={{ color: timerColor, fontSize: 16 }} />
+                    <Typography variant="body2" fontWeight="bold" sx={{ color: timerColor, fontSize: '0.85rem' }}>{turnTimer}s</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1, justifyContent: 'center' }}>
-                    <Box sx={{ width: 36, height: 36 }}>
+                    <Box sx={{ 
+                        width: 50, 
+                        height: 50, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        transform: 'scale(0.8)',
+                    }}>
                         <LudoDice value={diceResult} rolling={isRolling} 
                             color={(currentTurnPlayer?.color && colorHex[currentTurnPlayer.color.toUpperCase()]) ? colorHex[currentTurnPlayer.color.toUpperCase()] : '#7c3aed'}
                         />
                     </Box>
                     <Button variant="contained" size="small" onClick={handleRollDice} 
                         disabled={!isMyTurn || diceResult !== null || isRolling || game.state !== 'IN_PROGRESS'}
-                        sx={{ py: 1, px: 2, borderRadius: 2, fontWeight: 'bold', fontSize: '0.8rem', minWidth: 'auto' }}
+                        sx={{ py: 1.2, px: 2, borderRadius: 2, fontWeight: '900', fontSize: '0.85rem', minWidth: '80px', boxShadow: isMyTurn ? '0 0 15px rgba(124,58,237,0.5)' : 'none' }}
                     >
                         {isMyTurn ? '🎲 ROLL' : '⏳ Wait'}
                     </Button>
