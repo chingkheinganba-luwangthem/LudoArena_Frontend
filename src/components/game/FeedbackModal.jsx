@@ -28,7 +28,25 @@ const FeedbackModal = ({ open, onClose }) => {
     };
 
     return (
-        <Dialog open={open} onClose={onClose} PaperProps={{ sx: { borderRadius: 4, bgcolor: '#13131a', border: '1px solid rgba(255,255,255,0.1)', p: 1 } }}>
+        <Dialog 
+            open={open} 
+            onClose={onClose} 
+            PaperProps={{ 
+                sx: { 
+                    borderRadius: 4, 
+                    bgcolor: '#13131a', 
+                    border: '1px solid rgba(255,255,255,0.1)', 
+                    p: 1,
+                    // Position to the right on desktop
+                    position: { md: 'fixed' },
+                    right: { md: 40 },
+                    top: { md: '50%' },
+                    transform: { md: 'translateY(-50%)' },
+                    margin: { md: 0 },
+                    maxWidth: { xs: '90vw', sm: 400 }
+                } 
+            }}
+        >
             {submitted ? (
                 <Box sx={{ p: 4, textAlign: 'center' }}>
                     <Typography variant="h5" fontWeight="bold" color="#22c55e" gutterBottom>🎉 Thank You!</Typography>
