@@ -4,11 +4,14 @@ import { useAuth } from '../context/AuthContext';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import CasinoIcon from '@mui/icons-material/Casino';
 import CloseIcon from '@mui/icons-material/Close';
+import RateReviewIcon from '@mui/icons-material/RateReview';
 import { useNavigate } from 'react-router-dom';
+import FeedbackModal from '../components/game/FeedbackModal';
 
 const Profile = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [showFeedback, setShowFeedback] = React.useState(false);
 
     if (!user) return null;
 
@@ -105,7 +108,27 @@ const Profile = () => {
                         </Box>
                     </Grid>
                 </Grid>
+
+                <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.06)' }} />
+                
+                <Box sx={{ textAlign: 'center' }}>
+                    <Button 
+                        variant="contained" 
+                        startIcon={<RateReviewIcon />}
+                        onClick={() => setShowFeedback(true)}
+                        sx={{ 
+                            borderRadius: 3, px: 4, py: 1.5, fontWeight: 'bold',
+                            background: 'linear-gradient(135deg, #ffd700, #ff8c00)',
+                            color: '#000',
+                            '&:hover': { background: 'linear-gradient(135deg, #ffea00, #ffa500)', transform: 'translateY(-2px)' },
+                            transition: 'all 0.3s ease'
+                        }}
+                    >
+                        Rate LudoArena Experience
+                    </Button>
+                </Box>
             </Card>
+            <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
         </Box>
     );
 };

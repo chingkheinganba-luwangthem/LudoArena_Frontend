@@ -12,10 +12,30 @@ import EmailIcon from '@mui/icons-material/Email';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import BusinessIcon from '@mui/icons-material/Business';
 import InfoIcon from '@mui/icons-material/Info';
+import PhoneIcon from '@mui/icons-material/Phone';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import StarIcon from '@mui/icons-material/Star';
 import ludoBg from '../assets/ludo-bg.jpg';
+import api from '../services/api';
 
 const Landing = () => {
     const navigate = useNavigate();
+    const [publicFeedbacks, setPublicFeedbacks] = React.useState([]);
+
+    React.useEffect(() => {
+        const fetchFeedbacks = async () => {
+            try {
+                const res = await api.get('/feedback/public');
+                if (res.data) setPublicFeedbacks(res.data);
+            } catch (err) {
+                console.error('Failed to fetch feedbacks');
+            }
+        };
+        fetchFeedbacks();
+    }, []);
 
     const features = [
         { title: 'Multiplayer', desc: 'Play with up to 4 friends in private rooms with real-time WebSocket gameplay.', icon: <GroupIcon sx={{ fontSize: 40 }} /> },
@@ -208,6 +228,48 @@ const Landing = () => {
                     </Stack>
                 </Box>
 
+                {/* Wall of Fame (Reviews) Section */}
+                {publicFeedbacks.length > 0 && (
+                    <Box sx={{ mt: { xs: 8, md: 14 } }}>
+                        <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 800, mb: 2, background: 'linear-gradient(135deg, #ffd700, #ff8c00)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                            Wall of Fame
+                        </Typography>
+                        <Typography variant="body1" sx={{ textAlign: 'center', color: '#64748b', mb: 6, maxWidth: 600, mx: 'auto' }}>
+                            Hear what our players have to say about their LudoArena experience
+                        </Typography>
+                        <Grid container spacing={3}>
+                            {publicFeedbacks.map((fb, idx) => (
+                                <Grid item xs={12} md={4} key={ fb.id || idx }>
+                                    <Card sx={{ 
+                                        height: '100%', borderRadius: 4, background: 'rgba(19, 19, 26, 0.7)', 
+                                        backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.06)',
+                                        p: 3, transition: 'all 0.3s ease',
+                                        '&:hover': { transform: 'translateY(-4px)', borderColor: 'rgba(255,215,0,0.3)' }
+                                    }}>
+                                        <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+                                            {[...Array(5)].map((_, i) => (
+                                                <StarIcon key={i} sx={{ fontSize: 18, color: i < fb.rating ? '#ffd700' : 'rgba(255,255,255,0.1)' }} />
+                                            ))}
+                                        </Stack>
+                                        <Typography variant="body1" sx={{ color: '#e2e8f0', mb: 2, fontStyle: 'italic', height: '60px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            "{fb.comment || 'No comment provided'}"
+                                        </Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                            <Avatar sx={{ width: 32, height: 32, bgcolor: '#7c3aed', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                {fb.user?.name?.charAt(0).toUpperCase() || '?'}
+                                            </Avatar>
+                                            <Box>
+                                                <Typography variant="subtitle2" sx={{ color: '#e2e8f0', fontWeight: 'bold', fontSize: '0.8rem' }}>{fb.user?.name || 'Player'}</Typography>
+                                                <Typography variant="caption" sx={{ color: '#64748b' }}>Verified Player</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Card>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
+                )}
+
                 {/* Contact Section */}
                 <Box id="contact" sx={{ mt: { xs: 8, md: 14 } }}>
                     <Typography variant="h4" sx={{ textAlign: 'center', fontWeight: 800, mb: 6, background: 'linear-gradient(135deg, #e2e8f0, #f59e0b)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
@@ -220,10 +282,10 @@ const Landing = () => {
                                 border: '1px solid rgba(255,255,255,0.06)', p: 4, textAlign: 'center',
                                 transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 15px 30px rgba(0,0,0,0.3)' }
                             }}>
-                                <BusinessIcon sx={{ fontSize: 48, color: '#a78bfa', mb: 2 }} />
-                                <Typography variant="h6" fontWeight="bold" sx={{ color: '#e2e8f0', mb: 1 }}>Business Inquiry</Typography>
+                                <PhoneIcon sx={{ fontSize: 48, color: '#a78bfa', mb: 2 }} />
+                                <Typography variant="h6" fontWeight="bold" sx={{ color: '#e2e8f0', mb: 1 }}>Call Us</Typography>
                                 <Typography variant="body1" sx={{ color: '#06b6d4', fontWeight: 600 }}>
-                                    business@ludoarena.com
+                                    +91 9378022142
                                 </Typography>
                             </Card>
                         </Grid>
@@ -233,10 +295,10 @@ const Landing = () => {
                                 border: '1px solid rgba(255,255,255,0.06)', p: 4, textAlign: 'center',
                                 transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 15px 30px rgba(0,0,0,0.3)' }
                             }}>
-                                <SupportAgentIcon sx={{ fontSize: 48, color: '#22c55e', mb: 2 }} />
-                                <Typography variant="h6" fontWeight="bold" sx={{ color: '#e2e8f0', mb: 1 }}>Customer Support</Typography>
+                                <EmailIcon sx={{ fontSize: 48, color: '#22c55e', mb: 2 }} />
+                                <Typography variant="h6" fontWeight="bold" sx={{ color: '#e2e8f0', mb: 1 }}>Contact Email</Typography>
                                 <Typography variant="body1" sx={{ color: '#06b6d4', fontWeight: 600 }}>
-                                    support@ludoarena.com
+                                    chingkheinganbaluwangthem@gmail.com
                                 </Typography>
                             </Card>
                         </Grid>
@@ -277,7 +339,13 @@ const Landing = () => {
                             <Typography variant="body2" sx={{ color: '#475569' }}>
                                 © 2026 LudoArena. All Rights Reserved.
                             </Typography>
-                            <Typography variant="caption" sx={{ color: '#334155', display: 'block', mt: 0.5 }}>
+                            <Stack direction="row" spacing={1} justifyContent={{ xs: 'center', md: 'right' }} sx={{ mt: 1 }}>
+                                <IconButton size="small" sx={{ color: '#64748b', '&:hover': { color: '#e2e8f0' } }}><TwitterIcon fontSize="small" /></IconButton>
+                                <IconButton size="small" sx={{ color: '#64748b', '&:hover': { color: '#e2e8f0' } }}><InstagramIcon fontSize="small" /></IconButton>
+                                <IconButton size="small" sx={{ color: '#64748b', '&:hover': { color: '#e2e8f0' } }}><FacebookIcon fontSize="small" /></IconButton>
+                                <IconButton size="small" sx={{ color: '#64748b', '&:hover': { color: '#e2e8f0' } }}><LinkedInIcon fontSize="small" /></IconButton>
+                            </Stack>
+                            <Typography variant="caption" sx={{ color: '#334155', display: 'block', mt: 1 }}>
                                 Created by chingkheinganba Luwangthem
                             </Typography>
                         </Grid>

@@ -5,12 +5,14 @@ import { useAuth } from '../context/AuthContext';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CasinoIcon from '@mui/icons-material/Casino';
+import FeedbackModal from './game/FeedbackModal';
 
 const Navbar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [anchorEl, setAnchorEl] = useState(null);
+    const [showFeedback, setShowFeedback] = useState(false);
 
     const handleMenu = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
@@ -123,6 +125,7 @@ const Navbar = () => {
                         >
                             <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}>Profile</MenuItem>
                             <MenuItem onClick={() => { handleClose(); navigate('/leaderboard'); }}>Leaderboard</MenuItem>
+                            <MenuItem onClick={() => { handleClose(); setShowFeedback(true); }}>Feedback</MenuItem>
                             <MenuItem onClick={() => { handleClose(); navigate('/settings'); }}>Settings</MenuItem>
                             <MenuItem onClick={onLogout} sx={{ color: '#ef4444' }}>Logout</MenuItem>
                         </Menu>
@@ -151,6 +154,7 @@ const Navbar = () => {
                     </Box>
                 )}
             </Toolbar>
+            <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
         </AppBar>
     );
 };

@@ -7,6 +7,7 @@ import api from '../services/api';
 import LudoSVG from '../components/game/LudoSVG';
 import ChatPanel from '../components/game/ChatPanel';
 import LudoDice from '../components/game/LudoDice';
+import FeedbackModal from '../components/game/FeedbackModal';
 import TimerIcon from '@mui/icons-material/Timer';
 import ChatIcon from '@mui/icons-material/Chat';
 import PeopleIcon from '@mui/icons-material/People';
@@ -32,6 +33,8 @@ const GameBoard = () => {
     const [showChat, setShowChat] = useState(false);
     const [showPlayers, setShowPlayers] = useState(false);
     const [showEndGameDialog, setShowEndGameDialog] = useState(false);
+    const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+    const [feedbackShown, setFeedbackShown] = useState(false);
 
     useEffect(() => {
         const fetchGame = async () => {
@@ -73,6 +76,16 @@ const GameBoard = () => {
             skipTurn(gameId, user.id);
         }
     }, [turnTimer, isMyTurn, gameId, user?.id, skipTurn, game?.state]);
+
+    useEffect(() => {
+        if (game?.state === 'COMPLETED' && !feedbackShown) {
+            const timer = setTimeout(() => {
+                setShowFeedbackModal(true);
+                setFeedbackShown(true);
+            }, 3000); // Show feedback after 3s of seeing the results
+            return () => clearTimeout(timer);
+        }
+    }, [game?.state, feedbackShown]);
 
     if (!game || !players.length) {
         return (
@@ -330,6 +343,8 @@ const GameBoard = () => {
                     </Stack>
                 </Box>
             )}
+
+            <FeedbackModal open={showFeedbackModal} onClose={() => setShowFeedbackModal(false)} />
         </Box>
     );
 };
